@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = require('./route');
 const config = require('config');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -21,6 +22,16 @@ app.use(routes);
 
 app.use((req, res) => {
     res.status(404).send(" 404 - Não encontramos a rota que você requisitou.")
+});
+
+mongoose.connect('mongodb+srv://admin:8XQGtwFu552rLimC@cluster0.vvbav.mongodb.net/?retryWrites=true&w=majority');
+
+mongoose.connection.on('connected', function () {
+  console.log('Connected to Database');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.log('Database error '+err);
 });
 
 var envirioment = (process.env.NEXT_ENV == undefined ? 'local' : process.env.NEXT_ENV) + '.';
